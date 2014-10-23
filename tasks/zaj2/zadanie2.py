@@ -50,6 +50,55 @@ def filter_animals(animal_list):
 
     :param animal_list:
     """
+    
+    
+    def weight(value, unit):
+        '''
+        zwraca mase w kg
+        '''
+        if unit=='g':
+            return value*1e-3
+        elif unit=='Mg':
+            return value*1e3
+        elif unit=='mg':
+            return value*1e-6
+        else:
+            return value
+    
+    genres = sorted(set(x['genus'] for x in animal_list))
 
+#    animals = {genre:None for genre in genres }    
+#    males=dict()
+#    females=dict()
+    animals={'male': dict(), 'female': dict()}
+    # stworz slownik z pierwszym wystapieniem kazdego gatunku
+    for animal in animal_list:
+        for sex in ('male', 'female'):
+            if len(animals[sex].keys()) < len(genres) and animal['sex'] == sex:
+                animals[sex][animal['genus']] = animal
+        if len(animals['female'].keys()) >= len(genres) and len(animals['female'].keys()) >= len(genres):
+            break
+    
+#    print (sorted(set(animals['male'])))
+ #   print (sorted(set(animals['female'])))
+    
+    for animal in animal_list:
+        sex = animal['sex']
+        genre = animal['genus']
+        mass = weight(*animal['mass'])
+        if mass < weight(*animals[sex][genre]['mass']):
+            animals[sex][genre] = animal
+#    print (animals)
+    
+    l=[]
+    for genre in sorted(genres):
+        z = sorted( [animals['male'][genre], animals['female'][genre] ] , key=lambda x: x['name'] )
+        l.append(z[0])
+        l.append(z[1])
+    return l
+    
 if __name__ == "__main__":
     animals = load_animals()
+#    print (animals[0])
+    filter_animals(animals)
+
