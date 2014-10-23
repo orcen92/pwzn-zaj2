@@ -94,18 +94,19 @@ class Integrator(object):
         ch, cf = Integrator.get_level_parameters(self.level)
         a, b = func_range
         
-        n = (num_evaluations+0.5)//self.level + 1
+        n = int((num_evaluations+0.5)//self.level + 1)
+        
         x1 = myrange(a, b, n)
         s = 0
         for i in range(n-1):
             xa, xb = x1[i], x1[i+1]
             x2 = myrange(xa, xb, self.level)
             h=x2[1] - x2[0]
-            s+=h*ch*sum( cf[j] * fun(x2[j]) for j in range(self.level) )
+            s+=h*ch*sum( cf[j] * func(x2[j]) for j in range(self.level) )
         return s
 
 if __name__ == '__main__':
     i = Integrator(3)
-    print(i.integrate(math.sin, (0, 2*math.pi), 30))
+    print(i.integrate(math.sin, (0, math.pi), 30))
     print(i.integrate(lambda x: x*x, (0, 1), 30))
 
